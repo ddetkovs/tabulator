@@ -12831,8 +12831,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 				dataItems = dataList;
 				displayItems = displayList;
-
-				fillList();
 			}
 
 			function fillList() {
@@ -12909,14 +12907,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				cancel();
 			}
 
+			function parseFromEditorParamsOrColumnValues() {
+				if (editorParams.values === true) {
+					parseItems(getUniqueColumnValues(), initialValue);
+				} else {
+					parseItems(editorParams.values || [], initialValue);
+				}
+			}
+
 			function showList() {
 				if (!listEl.parentNode) {
 
-					if (editorParams.values === true) {
-						parseItems(getUniqueColumnValues(), initialValue);
-					} else {
-						parseItems(editorParams.values || [], initialValue);
-					}
+					parseFromEditorParamsOrColumnValues();
+					fillList();
 
 					var offset = Tabulator.prototype.helpers.elOffset(cellEl);
 
@@ -13000,6 +13003,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			//style list element
 			listEl = document.createElement("div");
 			listEl.classList.add("tabulator-edit-select-list");
+
+			parseFromEditorParamsOrColumnValues();
 
 			onRendered(function () {
 				input.style.height = "100%";
@@ -18062,6 +18067,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		"sorters": "sorters",
 		// "sort_dir":"sort_dir",
 		"filters": "filters"
+		// "filter_value":"filter_value",
+		// "filter_type":"filter_type",
 	};
 
 	//set the property names for pagination responses
